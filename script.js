@@ -79,44 +79,93 @@ const displayMovies = (movies) => {
 
 // Function to create a movie card with a watchlist button
 const createMovieCard = (movie, showWatchlistButton) => {
+    // Ensure the full poster path is constructed correctly
+    const posterPath = movie.poster_path 
+        ? movie.poster_path.startsWith("https") 
+            ? movie.poster_path // Already a full URL (for safety)
+            : `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : 'https://via.placeholder.com/500x750?text=No+Image';
+
+    // Safely parse the rating
+    const ratingNumber = parseFloat(movie.vote_average);
+    const rating = !isNaN(ratingNumber) ? ratingNumber.toFixed(1) : "N/A";
+
+    // Create the card
     const movieCard = document.createElement("div");
     movieCard.classList.add("col-md-3", "mb-4");
     movieCard.innerHTML = `
         <div class="card">
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
+            <img src="${posterPath}" class="card-img-top" alt="${movie.title}">
             <div class="card-body">
                 <h5 class="card-title">${movie.title}</h5>
-                <p class="card-text">Rating: ${movie.vote_average}</p>
-                ${showWatchlistButton ? `<button class="btn btn-warning" onclick="addToWatchlist(${movie.id}, '${movie.title}', '${movie.poster_path}', ${movie.vote_average})">+ Watchlist</button>` : ''}
+                <p class="card-text">Rating: ${rating}</p>
+                ${
+                  showWatchlistButton 
+                  ? `<button 
+                        class="btn btn-warning" 
+                        onclick="addToWatchlist(${movie.id}, '${movie.title}', '${movie.poster_path}', '${movie.vote_average}')">
+                        + Watchlist
+                     </button>` 
+                  : ''
+                }
             </div>
         </div>
     `;
     return movieCard;
 };
 
-// Function to add a movie to the watchlist
+
+// Function to add a movie to the watchlist (store only the relative poster path)
 const addToWatchlist = (id, title, posterPath, rating) => {
     let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
+    // Store only the relative poster path in Local Storage
+    const cleanPosterPath = posterPath && posterPath.includes("/t/p/") 
+        ? posterPath.replace("https://image.tmdb.org/t/p/w500", "")
+        : posterPath;
+
+    // Convert rating to a float if possible; otherwise store "N/A"
+    const ratingNumber = parseFloat(rating);
+    const cleanRating = !isNaN(ratingNumber) ? ratingNumber.toFixed(1) : "N/A";
+
+    // Only add if it doesn't already exist
     if (!watchlist.some(movie => movie.id === id)) {
-        watchlist.push({ id, title, posterPath, rating });
+        watchlist.push({ 
+            id, 
+            title, 
+            poster_path: cleanPosterPath, 
+            vote_average: cleanRating 
+        });
         localStorage.setItem("watchlist", JSON.stringify(watchlist));
         console.log("Movie added to Watchlist:", title);
+        loadWatchlist(); // Refresh watchlist immediately
     }
 };
 
-// Function to load and display watchlist movies
+// Function to load and display watchlist movies (ensure poster URLs are corrected)
 const loadWatchlist = () => {
     watchlistMoviesContainer.innerHTML = "";
     const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
     if (watchlist.length === 0) {
         watchlistMoviesContainer.innerHTML = "<p class='text-center'>No movies in your watchlist.</p>";
+        return;
     }
+
     watchlist.forEach(movie => {
-        const movieCard = createMovieCard(movie, false);
-        watchlistMoviesContainer.appendChild(movieCard);
+        // Ensure the full poster URL is reconstructed before displaying
+        movie.poster_path = movie.poster_path 
+            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            : 'https://via.placeholder.com/500x750?text=No+Image';
+
+        watchlistMoviesContainer.appendChild(createMovieCard(movie, false));
     });
 };
 
+// Load watchlist on page load
+document.addEventListener("DOMContentLoaded", () => {
+    loadWatchlist();
+});
 // Event Listener for Decade Selection Change
 decadeSelect.addEventListener("change", (event) => {
     fetchClassicMovies(event.target.value);
