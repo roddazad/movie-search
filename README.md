@@ -4,37 +4,34 @@ Movie Search App
 
 The Movie Search App is a web-based application that allows users to search for movies, view trending films, and explore classic movies based on decades. The app fetches movie data from The Movie Database (TMDb) API and presents an interactive, user-friendly interface using HTML, CSS, JavaScript, and Bootstrap.
 
-🎯 Features
+## Features
+✅ **Search for Movies** using TMDb API  
+✅ **View Trending Movies** dynamically fetched from the API  
+✅ **Explore Classic Movies** sorted by decade  
+✅ **Add Movies to a Watchlist** with Local Storage  
+✅ **Remove Movies from the Watchlist**  
+✅ **Consistent UI with Smooth Animations**  
+✅ **Dark Mode-Friendly Theme**  
 
-Movie Search by Title: Find any movie and view details like ratings, release year, description, and trailer.
+## Future Enhancements
+🔹 **Movie Details Page** - When a user searches for a movie and clicks on a result, they will be able to see detailed information about that movie, including its description, cast, release date, and ratings.  
+🔹 **Genre-Based Filtering** - Allow users to filter movies by genre for better discovery.  
+🔹 **User Authentication** - Enable users to save their watchlists across different devices.  
 
-Trending & Popular Movies: Browse a list of trending and top-rated movies.
 
-Classic Movies Section: Explore classic movies categorized by decade (70s, 80s, 90s, etc.).
+## Setup Instructions
+1️⃣ **Clone the repository**  
+2️⃣ **Obtain an API Key** from [TMDb](https://www.themoviedb.org/)  
+3️⃣ **Add the API Key** to the JavaScript file  
+4️⃣ **Run the project locally** by opening `index.html`  
 
-Movie Details Page: Get in-depth information, including cast, director, genre, and reviews.
+## Technologies Used
+- **HTML, CSS, JavaScript**
+- **Bootstrap for Styling**
+- **TMDb API for Movie Data**
+- **Local Storage for Watchlist Management**
 
-Filter & Sorting Options: Filter movies by release year, genre, or rating and sort by popularity, release date, or rating.
 
-Save to Watchlist: Users can save movies to a "Watchlist" using local storage.
-
-🛠️ Tech Stack
-
-Frontend: HTML, CSS, Bootstrap
-
-JavaScript: Fetch API for retrieving movie data
-
-API: TMDb API
-
-Local Storage: Save favorite movies to watch later
-
-🚀 Getting Started
-
-1️⃣ Prerequisites
-
-Basic knowledge of HTML, CSS, and JavaScript
-
-API Key from TMDb (Sign up at TMDb API)
 
 2️⃣ Installation
 
@@ -98,5 +95,6 @@ This project is licensed under the MIT License.
 
 📧 Contact
 
+Enjoy the app and stay tuned for future updates! 🚀🎬
 For any inquiries or suggestions, contact me at roddazad@gmail.com
 
