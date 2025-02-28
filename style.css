@@ -1,6 +1,4 @@
-
 /* General Styles */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #121212;
@@ -52,7 +50,7 @@ body {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .hero-section .container {
@@ -73,4 +71,115 @@ body {
 .hero-section .btn {
     font-size: 1.1rem;
     padding: 10px 20px;
+}
+
+/* Trending Movies Section */
+#trending {
+    padding: 50px 0;
+    text-align: center;
+}
+
+#trending h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #f39c12;
+}
+
+#trendingMoviesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: white;
+}
+
+.trending-movie-card {
+    width: 200px;
+    margin: 10px;
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.trending-movie-card:hover {
+    transform: scale(1.05);
+}
+
+.trending-movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.trending-movie-card .card-body {
+    padding: 10px;
+}
+
+.trending-movie-card h5 {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.trending-movie-card p {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+/* Classic Movies Section */
+#classics {
+    padding: 50px 0;
+    text-align: center;
+}
+
+#classics h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #f39c12;
+}
+
+#decadeSelect {
+    background: #1c1c1c;
+    color: #fff;
+    border: 1px solid #f39c12;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#classicMoviesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: white;
+}
+
+.classic-movie-card {
+    width: 200px;
+    margin: 10px;
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.classic-movie-card:hover {
+    transform: scale(1.05);
+}
+
+.classic-movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.classic-movie-card .card-body {
+    padding: 10px;
+}
+
+.classic-movie-card h5 {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.classic-movie-card p {
+    font-size: 0.9rem;
+    color: #bbb;
 }

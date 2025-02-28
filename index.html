@@ -6,6 +6,7 @@
     <title>Movie Search App</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script defer src="script.js"></script> <!-- Link to JavaScript -->
 </head>
 <body>
     <!-- Navbar -->
@@ -31,16 +32,43 @@
         </div>
     </nav>
     
-    <!-- Hero Section Placeholder -->
+    <!-- Hero Section with Search -->
     <header class="hero-section">
         <div class="container text-center">
             <h1>Discover Your Next Favorite Movie</h1>
             <p>Search and explore trending & classic films</p>
-            <a href="#search" class="btn btn-primary">Start Searching</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search for a movie...">
+                <button id="searchButton" class="btn btn-primary">Search</button>
+            </div>
         </div>
     </header>
-
-    <script defer src="script.js"></script> <!-- Link to JavaScript -->
+    
+    <!-- Search Results Section -->
+    <section id="searchResults" class="container mt-4">
+        <div class="row" id="moviesContainer"></div>
+    </section>
+    
+    <!-- Trending Movies Section -->
+    <section id="trending" class="container mt-5">
+        <h2 class="text-center mb-4">🔥 Trending Movies</h2>
+        <div class="row" id="trendingMoviesContainer"></div>
+    </section>
+    
+     <!-- Classic Movies Section -->
+     <section id="classics" class="container mt-5">
+        <h2 class="text-center mb-4">🎞️ Classic Movies</h2>
+        <div class="text-center mb-3">
+            <label for="decadeSelect">Choose a Decade:</label>
+            <select id="decadeSelect" class="form-select w-auto d-inline-block ms-2">
+                <option value="1970">1970s</option>
+                <option value="1980">1980s</option>
+                <option value="1990">1990s</option>
+            </select>
+        </div>
+        <div class="row" id="classicMoviesContainer"></div>
+    </section>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
