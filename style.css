@@ -1,4 +1,6 @@
+
 /* General Styles */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #121212;
@@ -36,20 +38,21 @@ body {
 /* Hero Section */
 .hero-section {
     height: 50vh;
-    background: url('https://source.unsplash.com/1600x900/?movie,cinema') center/cover no-repeat;
+    background: url('./assests/img/hero-img.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 20px;
     position: relative;
+    color: white;
 }
 
 .hero-section::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .hero-section .container {
