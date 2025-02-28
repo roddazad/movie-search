@@ -84,9 +84,7 @@ const displayMovies = (movies) => {
 const createMovieCard = (movie, showWatchlistButton) => {
     // Ensure the full poster path is constructed correctly
     const posterPath = movie.poster_path 
-        ? movie.poster_path.startsWith("https") 
-            ? movie.poster_path // Already a full URL (for safety)
-            : `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
         : 'https://via.placeholder.com/500x750?text=No+Image';
 
     // Safely parse the rating
@@ -102,50 +100,45 @@ const createMovieCard = (movie, showWatchlistButton) => {
             <div class="card-body">
                 <h5 class="card-title">${movie.title}</h5>
                 <p class="card-text">Rating: ${rating}</p>
-                ${
-                  showWatchlistButton 
-                  ? `<button 
-                        class="btn btn-warning" 
-                        onclick="addToWatchlist(${movie.id}, '${movie.title}', '${movie.poster_path}', '${movie.vote_average}')">
-                        + Watchlist
-                     </button>` 
-                  : ''
-                }
+                ${showWatchlistButton ? `<button class="btn btn-warning watchlist-btn">+ Watchlist</button>` : ''}
             </div>
         </div>
     `;
+
+    // Add event listener for "+ Watchlist" button
+    if (showWatchlistButton) {
+        const button = movieCard.querySelector(".watchlist-btn");
+        button.addEventListener("click", () => {
+            addToWatchlist(movie.id, movie.title, posterPath, rating);
+        });
+    }
+
     return movieCard;
 };
 
-
-// Function to add a movie to the watchlist (store only the relative poster path)
+// Function to remove a movie from the watchlist
+const removeFromWatchlist = (id) => {
+    let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    watchlist = watchlist.filter(movie => movie.id !== id);
+    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    loadWatchlist();
+};
+// Function to add a movie to the watchlist
 const addToWatchlist = (id, title, posterPath, rating) => {
     let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
 
-    // Store only the relative poster path in Local Storage
-    const cleanPosterPath = posterPath && posterPath.includes("/t/p/") 
-        ? posterPath.replace("https://image.tmdb.org/t/p/w500", "")
-        : posterPath;
-
-    // Convert rating to a float if possible; otherwise store "N/A"
-    const ratingNumber = parseFloat(rating);
-    const cleanRating = !isNaN(ratingNumber) ? ratingNumber.toFixed(1) : "N/A";
-
-    // Only add if it doesn't already exist
+    // Ensure the movie isn't already in the watchlist
     if (!watchlist.some(movie => movie.id === id)) {
-        watchlist.push({ 
-            id, 
-            title, 
-            poster_path: cleanPosterPath, 
-            vote_average: cleanRating 
-        });
+        watchlist.push({ id, title, poster_path: posterPath, vote_average: rating });
         localStorage.setItem("watchlist", JSON.stringify(watchlist));
         console.log("Movie added to Watchlist:", title);
         loadWatchlist(); // Refresh watchlist immediately
     }
 };
 
-// Function to load and display watchlist movies (ensure poster URLs are corrected)
+
+// Function to load and display watchlist movies
+
 const loadWatchlist = () => {
     watchlistMoviesContainer.innerHTML = "";
     const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
@@ -156,19 +149,40 @@ const loadWatchlist = () => {
     }
 
     watchlist.forEach(movie => {
-        // Ensure the full poster URL is reconstructed before displaying
-        movie.poster_path = movie.poster_path 
-            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        let posterPath = movie.poster_path
+            ? (movie.poster_path.startsWith("https") 
+                ? movie.poster_path  // Already a full URL
+                : `https://image.tmdb.org/t/p/w500${movie.poster_path}`)
             : 'https://via.placeholder.com/500x750?text=No+Image';
 
-        watchlistMoviesContainer.appendChild(createMovieCard(movie, false));
+        const movieCard = document.createElement("div");
+        movieCard.classList.add("col-md-3", "mb-4", "fade-in");
+        movieCard.innerHTML = `
+            <div class="card">
+                <img src="${posterPath}" class="card-img-top" alt="${movie.title}">
+                <div class="card-body">
+                    <h5 class="card-title">${movie.title}</h5>
+                    <button class="btn btn-danger remove-btn">Remove</button>
+                </div>
+            </div>
+        `;
+
+        watchlistMoviesContainer.appendChild(movieCard);
+
+        // Ensure the button exists before adding the event listener
+        const removeButton = movieCard.querySelector(".remove-btn");
+        if (removeButton) {
+            removeButton.addEventListener("click", () => removeFromWatchlist(movie.id));
+        }
     });
 };
 
-// Load watchlist on page load
+// Load watchlist when page loads
 document.addEventListener("DOMContentLoaded", () => {
     loadWatchlist();
 });
+
+
 // Event Listener for Decade Selection Change
 decadeSelect.addEventListener("change", (event) => {
     fetchClassicMovies(event.target.value);
