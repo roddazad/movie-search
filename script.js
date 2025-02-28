@@ -10,3 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+const API_KEY = "6cab5121ad10fba99713fbf8d33bc57a";
+const BASE_URL = "https://api.themoviedb.org/3";
