@@ -10,6 +10,9 @@ const classicMoviesContainer = document.getElementById("classicMoviesContainer")
 const watchlistMoviesContainer = document.getElementById("watchlistMoviesContainer");
 const decadeSelect = document.getElementById("decadeSelect");
 
+// Update footer year dynamically
+document.getElementById("year").textContent = new Date().getFullYear();
+
 // Function to fetch trending movies from TMDb API
 const fetchTrendingMovies = async () => {
     console.log("Fetching Trending Movies...");
