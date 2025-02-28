@@ -7,11 +7,12 @@ const searchButton = document.getElementById("searchButton");
 const moviesContainer = document.getElementById("moviesContainer");
 const trendingMoviesContainer = document.getElementById("trendingMoviesContainer");
 const classicMoviesContainer = document.getElementById("classicMoviesContainer");
+const watchlistMoviesContainer = document.getElementById("watchlistMoviesContainer");
 const decadeSelect = document.getElementById("decadeSelect");
 
 // Function to fetch trending movies from TMDb API
 const fetchTrendingMovies = async () => {
-    console.log("Fetching Trending Movies..."); // Debugging Log
+    console.log("Fetching Trending Movies...");
     const url = `${BASE_URL}/trending/movie/day?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -26,22 +27,13 @@ const fetchTrendingMovies = async () => {
 const displayTrendingMovies = (movies) => {
     trendingMoviesContainer.innerHTML = "";
     movies.forEach(movie => {
-        const movieCard = document.createElement("div");
-        movieCard.classList.add("trending-movie-card");
-        movieCard.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-            <div class="card-body">
-                <h5>${movie.title}</h5>
-                <p>Rating: ${movie.vote_average}</p>
-            </div>
-        `;
-        trendingMoviesContainer.appendChild(movieCard);
+        trendingMoviesContainer.appendChild(createMovieCard(movie, true));
     });
 };
 
-// Fetch Classic Movies from TMDb API based on selected decade
+// Function to fetch classic movies
 const fetchClassicMovies = async (decade) => {
-    console.log("Fetching Classic Movies for decade:", decade); // Debugging Log
+    console.log("Fetching Classic Movies for decade:", decade);
     const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&primary_release_date.gte=${decade}-01-01&primary_release_date.lte=${parseInt(decade) + 9}-12-31&sort_by=vote_average.desc`;
     try {
         const response = await fetch(url);
@@ -56,22 +48,13 @@ const fetchClassicMovies = async (decade) => {
 const displayClassicMovies = (movies) => {
     classicMoviesContainer.innerHTML = "";
     movies.forEach(movie => {
-        const movieCard = document.createElement("div");
-        movieCard.classList.add("classic-movie-card");
-        movieCard.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-            <div class="card-body">
-                <h5>${movie.title}</h5>
-                <p>Rating: ${movie.vote_average}</p>
-            </div>
-        `;
-        classicMoviesContainer.appendChild(movieCard);
+        classicMoviesContainer.appendChild(createMovieCard(movie, true));
     });
 };
 
 // Function to fetch movies based on search query
 const fetchMovies = async (query) => {
-    console.log("Fetching movies for query:", query); // Debugging Log
+    console.log("Fetching movies for query:", query);
     const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`;
     try {
         const response = await fetch(url);
@@ -90,20 +73,54 @@ const displayMovies = (movies) => {
         return;
     }
     movies.forEach(movie => {
-        const movieCard = document.createElement("div");
-        movieCard.classList.add("col-md-3", "mb-4");
-        movieCard.innerHTML = `
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
-                <div class="card-body">
-                    <h5 class="card-title">${movie.title}</h5>
-                    <p class="card-text">Rating: ${movie.vote_average}</p>
-                </div>
-            </div>
-        `;
-        moviesContainer.appendChild(movieCard);
+        moviesContainer.appendChild(createMovieCard(movie, true));
     });
 };
+
+// Function to create a movie card with a watchlist button
+const createMovieCard = (movie, showWatchlistButton) => {
+    const movieCard = document.createElement("div");
+    movieCard.classList.add("col-md-3", "mb-4");
+    movieCard.innerHTML = `
+        <div class="card">
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
+            <div class="card-body">
+                <h5 class="card-title">${movie.title}</h5>
+                <p class="card-text">Rating: ${movie.vote_average}</p>
+                ${showWatchlistButton ? `<button class="btn btn-warning" onclick="addToWatchlist(${movie.id}, '${movie.title}', '${movie.poster_path}', ${movie.vote_average})">+ Watchlist</button>` : ''}
+            </div>
+        </div>
+    `;
+    return movieCard;
+};
+
+// Function to add a movie to the watchlist
+const addToWatchlist = (id, title, posterPath, rating) => {
+    let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    if (!watchlist.some(movie => movie.id === id)) {
+        watchlist.push({ id, title, posterPath, rating });
+        localStorage.setItem("watchlist", JSON.stringify(watchlist));
+        console.log("Movie added to Watchlist:", title);
+    }
+};
+
+// Function to load and display watchlist movies
+const loadWatchlist = () => {
+    watchlistMoviesContainer.innerHTML = "";
+    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+    if (watchlist.length === 0) {
+        watchlistMoviesContainer.innerHTML = "<p class='text-center'>No movies in your watchlist.</p>";
+    }
+    watchlist.forEach(movie => {
+        const movieCard = createMovieCard(movie, false);
+        watchlistMoviesContainer.appendChild(movieCard);
+    });
+};
+
+// Event Listener for Decade Selection Change
+decadeSelect.addEventListener("change", (event) => {
+    fetchClassicMovies(event.target.value);
+});
 
 // Event Listener for Search Button
 searchButton.addEventListener("click", () => {
@@ -127,11 +144,11 @@ searchInput.addEventListener("keypress", (event) => {
 
 // Ensure DOM is loaded before running scripts
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM fully loaded"); // Debugging Log
+    console.log("DOM fully loaded");
     fetchTrendingMovies();
     fetchClassicMovies(decadeSelect.value);
+    loadWatchlist();
     
-    // Navbar Scroll Effect
     window.addEventListener("scroll", () => {
         if (window.scrollY > 50) {
             navbar.classList.add("scrolled");
