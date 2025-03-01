@@ -124,6 +124,7 @@ body {
     font-size: 0.9rem;
     color: #bbb;
 }
+
 /* Classic Movies Section */
 #classics {
     padding: 50px 0;
@@ -194,6 +195,8 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+/* Card Styles */
 .card {
     height: 100%;
     display: flex;
@@ -226,4 +229,72 @@ body {
 
 .card-text {
     min-height: 20px;
+}
+
+/* Carousel Items */
+
+/* Ensure carousel container is properly centered */
+#trendingMoviesCarousel {
+    max-width: 80%;
+    margin: auto;
+}
+
+/* Let each .carousel-item take full width */
+.carousel-item {
+    width: 100% !important;
+}
+
+/* Prevent the row from wrapping so we always see 3 columns in one row */
+.carousel-item .row {
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    gap: 15px;
+}
+
+/* Force exactly 3 columns (col-4) per slide */
+.carousel-item .col-3 {
+    flex: 0 0 25% !important;   /* Occupies 1/4 of the row */
+    max-width: 25% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+}
+.carousel-item .col-lg-4,
+.carousel-item .col-md-4,
+.carousel-item .col-sm-6,
+.carousel-item .col-12 {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+}
+
+/* Tablet View (Two cards per slide) */
+@media (max-width: 768px) {
+    .carousel-item .col-sm-6 {
+        flex: 0 0 48% !important; /* Two cards per row */
+        max-width: 48% !important;
+    }
+}
+
+/* Small Mobile View (One card per slide) */
+@media (max-width: 480px) {
+    .carousel-item .col-12 {
+        flex: 0 0 100% !important; /* Full width for one card */
+        max-width: 100% !important;
+        padding: 0 15px; /* Adds side padding to prevent touching edges */
+    }
+
+    /* Adjust card size to fit well */
+    .carousel-item .card {
+        width: 90% !important;
+        max-width: 320px !important; /* Prevents extra-wide cards */
+        margin: auto !important;
+    }
+
+    /* Adjust image height for smaller screens */
+    .carousel-item img {
+        height: 250px !important;
+        object-fit: cover !important;
+    }
 }

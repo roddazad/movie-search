@@ -1,85 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Search App</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script defer src="./script.js"></script> <!-- Link to JavaScript -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Search App</title>
+  <!-- Link to CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="./script.js"></script> <!-- Link to JavaScript -->
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">🎬 Movie Finder</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#trending">Trending</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#classics">Classics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#watchlist">Watchlist</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- Hero Section with Search -->
-    <header class="hero-section">
-        <div class="container text-center">
-            <h1>Discover Your Next Favorite Movie</h1>
-            <p>Search and explore trending & classic films</p>
-            <div class="search-bar">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search for a movie...">
-                <button id="searchButton" class="btn btn-primary">Search</button>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Search Results Section -->
-    <section id="searchResults" class="container mt-4">
-        <div class="row" id="moviesContainer"></div>
-    </section>
-    
-    <!-- Trending Movies Section -->
-    <section id="trending" class="container mt-5">
-        <h2 class="text-center mb-4">🔥 Trending Movies</h2>
-        <div class="row" id="trendingMoviesContainer"></div>
-    </section>
-    
-    <!-- Classic Movies Section -->
-    <section id="classics" class="container mt-5">
-        <h2 class="text-center mb-4">🎞️ Classic Movies</h2>
-        <div class="text-center mb-3">
-            <label for="decadeSelect" class="text-white">Choose a Decade:</label>
-            <select id="decadeSelect" class="form-select w-auto d-inline-block ms-2">
-                <option value="1970">1970s</option>
-                <option value="1980">1980s</option>
-                <option value="1990">1990s</option>
-            </select>
-        </div>
-        <div class="row" id="classicMoviesContainer"></div>
-    </section>
-    
-    <!-- Watchlist Section -->
-    <section id="watchlist" class="container mt-5">
-        <h2 class=" text-white text-center mb-4">📌 My Watchlist</h2>
-        <div class="row" id="watchlistMoviesContainer"></div>
-    </section>
-       <!-- Footer -->
-       <footer class="bg-dark text-white text-center py-3 mt-5">
-        <div class="container">
-            <p class="mb-0">&copy; <span id="year"></span> Movie Finder. All Rights Reserved.</p>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">🎬 Movie Finder</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#trending">Trending</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#classics">Classics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#watchlist">Watchlist</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Search -->
+  <header class="hero-section">
+    <div class="container text-center">
+      <h1>Discover Your Next Favorite Movie</h1>
+      <p>Search and explore trending &amp; classic films</p>
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          class="form-control"
+          placeholder="Search for a movie..."
+        />
+        <button id="searchButton" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search Results Section -->
+  <section id="searchResults" class="container mt-4">
+    <div class="row" id="moviesContainer"></div>
+  </section>
+
+  <!-- Trending Movies Section (Carousel) -->
+  <section id="trending" class="container mt-5">
+    <h2 class="text-center mb-4">🔥 Trending Movies</h2>
+    <div
+      id="trendingMoviesCarousel"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <!-- The carousel-inner is dynamically populated by script.js -->
+      <div class="carousel-inner" id="trendingMoviesContainer"></div>
+
+      <!-- Carousel Controls -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#trendingMoviesCarousel"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#trendingMoviesCarousel"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Classic Movies Section -->
+  <section id="classics" class="container mt-5">
+    <h2 class="text-center mb-4">🎞️ Classic Movies</h2>
+    <div class="text-center mb-3">
+      <label for="decadeSelect" class="text-white">Choose a Decade:</label>
+      <select
+        id="decadeSelect"
+        class="form-select w-auto d-inline-block ms-2"
+      >
+        <option value="1970">1970s</option>
+        <option value="1980">1980s</option>
+        <option value="1990">1990s</option>
+      </select>
+    </div>
+    <div class="row" id="classicMoviesContainer"></div>
+  </section>
+
+  <!-- Watchlist Section -->
+  <section id="watchlist" class="container mt-5">
+    <h2 class="text-white text-center mb-4">📌 My Watchlist</h2>
+    <div class="row" id="watchlistMoviesContainer"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p class="mb-0">
+        &copy; <span id="year"></span> Movie Finder. All Rights Reserved.
+      </p>
+    </div>
+  </footer>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
 </body>
 </html>

@@ -26,13 +26,84 @@ const fetchTrendingMovies = async () => {
     }
 };
 
-// Function to display trending movies
+// Function to create a movie card with an optional grid wrapper
+const createMovieCard = (movie, showWatchlistButton, inCarousel = false) => {
+    // Ensure the full poster path is constructed correctly
+    const posterPath = movie.poster_path 
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : 'https://via.placeholder.com/500x750?text=No+Image';
+
+    // Safely parse the rating
+    const ratingNumber = parseFloat(movie.vote_average);
+    const rating = !isNaN(ratingNumber) ? ratingNumber.toFixed(1) : "N/A";
+
+    // Create the card container element
+    const container = document.createElement("div");
+
+    // Add grid classes if NOT in carousel mode
+    if (!inCarousel) {
+        container.classList.add("col-md-3", "mb-4");
+    }
+    
+    container.innerHTML = `
+        <div class="card">
+            <img src="${posterPath}" class="card-img-top" alt="${movie.title}">
+            <div class="card-body">
+                <h5 class="card-title">${movie.title}</h5>
+                <p class="card-text">Rating: ${rating}</p>
+                ${showWatchlistButton ? `<button class="btn btn-warning watchlist-btn">+ Watchlist</button>` : ''}
+            </div>
+        </div>
+    `;
+
+    document.addEventListener("click", (event) => {
+        if (event.target.classList.contains("watchlist-btn")) {
+            // Find the closest movie card and extract details
+            const movieCard = event.target.closest(".card");
+            const title = movieCard.querySelector(".card-title").textContent;
+            const rating = movieCard.querySelector(".card-text").textContent.replace("Rating: ", "");
+            const posterPath = movieCard.querySelector(".card-img-top").getAttribute("src");
+    
+            // Generate a unique ID based on title (since we don't get an ID from TMDB in this function)
+            const movieId = title.toLowerCase().replace(/\s+/g, "-");
+    
+            addToWatchlist(movieId, title, posterPath, rating);
+        }
+    });
+
+    return container;
+};
+
+
+// Function to display trending movies inside the carousel
 const displayTrendingMovies = (movies) => {
     trendingMoviesContainer.innerHTML = "";
-    movies.forEach(movie => {
-        trendingMoviesContainer.appendChild(createMovieCard(movie, true));
-    });
+
+    let slides = "";
+    for (let i = 0; i < movies.length; i += 4) {
+        let activeClass = i === 0 ? "active" : "";
+        let movieGroup = movies.slice(i, i + 4);
+        while (movieGroup.length < 6) {
+            movieGroup.push({ title: "Placeholder", poster_path: null, vote_average: "N/A" });
+        }
+
+        slides += `
+            <div class="carousel-item ${activeClass}">
+                <div class="container">
+                    <div class="row d-flex justify-content-center gx-3">
+                        ${movieGroup.map(movie => `
+                            <div class="col-4 d-flex justify-content-center align-items-stretch">
+                                ${createMovieCard(movie, true, true).outerHTML}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    trendingMoviesContainer.innerHTML = slides;
 };
+
 
 // Function to fetch classic movies
 const fetchClassicMovies = async (decade) => {
@@ -80,42 +151,6 @@ const displayMovies = (movies) => {
     });
 };
 
-// Function to create a movie card with a watchlist button
-const createMovieCard = (movie, showWatchlistButton) => {
-    // Ensure the full poster path is constructed correctly
-    const posterPath = movie.poster_path 
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-        : 'https://via.placeholder.com/500x750?text=No+Image';
-
-    // Safely parse the rating
-    const ratingNumber = parseFloat(movie.vote_average);
-    const rating = !isNaN(ratingNumber) ? ratingNumber.toFixed(1) : "N/A";
-
-    // Create the card
-    const movieCard = document.createElement("div");
-    movieCard.classList.add("col-md-3", "mb-4");
-    movieCard.innerHTML = `
-        <div class="card">
-            <img src="${posterPath}" class="card-img-top" alt="${movie.title}">
-            <div class="card-body">
-                <h5 class="card-title">${movie.title}</h5>
-                <p class="card-text">Rating: ${rating}</p>
-                ${showWatchlistButton ? `<button class="btn btn-warning watchlist-btn">+ Watchlist</button>` : ''}
-            </div>
-        </div>
-    `;
-
-    // Add event listener for "+ Watchlist" button
-    if (showWatchlistButton) {
-        const button = movieCard.querySelector(".watchlist-btn");
-        button.addEventListener("click", () => {
-            addToWatchlist(movie.id, movie.title, posterPath, rating);
-        });
-    }
-
-    return movieCard;
-};
-
 // Function to remove a movie from the watchlist
 const removeFromWatchlist = (id) => {
     let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
@@ -123,6 +158,7 @@ const removeFromWatchlist = (id) => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
     loadWatchlist();
 };
+
 // Function to add a movie to the watchlist
 const addToWatchlist = (id, title, posterPath, rating) => {
     let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
@@ -136,9 +172,7 @@ const addToWatchlist = (id, title, posterPath, rating) => {
     }
 };
 
-
 // Function to load and display watchlist movies
-
 const loadWatchlist = () => {
     watchlistMoviesContainer.innerHTML = "";
     const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
@@ -169,19 +203,12 @@ const loadWatchlist = () => {
 
         watchlistMoviesContainer.appendChild(movieCard);
 
-        // Ensure the button exists before adding the event listener
         const removeButton = movieCard.querySelector(".remove-btn");
         if (removeButton) {
             removeButton.addEventListener("click", () => removeFromWatchlist(movie.id));
         }
     });
 };
-
-// Load watchlist when page loads
-document.addEventListener("DOMContentLoaded", () => {
-    loadWatchlist();
-});
-
 
 // Event Listener for Decade Selection Change
 decadeSelect.addEventListener("change", (event) => {
