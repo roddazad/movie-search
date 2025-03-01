@@ -149,27 +149,126 @@ const displayClassicMovies = (movies) => {
     classicMoviesContainer.innerHTML = slides;
 };
 // Function to fetch movies based on search query
+// const fetchMovies = async (query) => {
+//     console.log("Fetching movies for query:", query);
+//     const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`;
+//     try {
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         displayMovies(data.results);
+//     } catch (error) {
+//         console.error("Error fetching movies:", error);
+//     }
+// };
 const fetchMovies = async (query) => {
     console.log("Fetching movies for query:", query);
     const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`;
+    
     try {
         const response = await fetch(url);
         const data = await response.json();
-        displayMovies(data.results);
+        let movies = data.results;
+
+        // Prioritize movies that match the exact phrase
+        movies.sort((a, b) => {
+            const titleA = a.title.toLowerCase();
+            const titleB = b.title.toLowerCase();
+            const queryLower = query.toLowerCase();
+
+            const exactMatchA = titleA === queryLower;
+            const exactMatchB = titleB === queryLower;
+
+            if (exactMatchA && !exactMatchB) return -1;
+            if (!exactMatchA && exactMatchB) return 1;
+
+            const startsWithA = titleA.startsWith(queryLower);
+            const startsWithB = titleB.startsWith(queryLower);
+
+            if (startsWithA && !startsWithB) return -1;
+            if (!startsWithA && startsWithB) return 1;
+
+            return 0;
+        });
+
+        // Fetch additional details for each movie
+        const movieDetailsPromises = movies.map(movie => fetchMovieDetails(movie));
+        const detailedMovies = await Promise.all(movieDetailsPromises);
+
+        // Display refined search results with extra details
+        displayMovies(detailedMovies);
     } catch (error) {
         console.error("Error fetching movies:", error);
     }
 };
+    //Create fetchMovieDetails() to Get Director & Actors
+    const fetchMovieDetails = async (movie) => {
+        const url = `${BASE_URL}/movie/${movie.id}?api_key=${API_KEY}&append_to_response=credits`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
+            // Extract director and top 3 actors
+            const director = data.credits.crew.find(person => person.job === "Director")?.name || "Unknown Director";
+            const topActors = data.credits.cast.slice(0, 3).map(actor => actor.name).join(", ") || "No Actors Listed";
+
+            return {
+                id: movie.id,
+                title: movie.title,
+                releaseDate: movie.release_date ? movie.release_date.split("-")[0] : "N/A",
+                rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
+                poster_path: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://via.placeholder.com/500x750?text=No+Image",
+                overview: movie.overview || "No description available.",
+                director: director,
+                actors: topActors
+            };
+        } catch (error) {
+            console.error("Error fetching movie details:", error);
+            return movie; // Return basic movie info if details fail
+        }
+    };
 // Function to display search results
+// const displayMovies = (movies) => {
+//     moviesContainer.innerHTML = "";
+//     if (!movies || movies.length === 0) {
+//         moviesContainer.innerHTML = "<p class='text-center'>No movies found.</p>";
+//         return;
+//     }
+//     movies.forEach(movie => {
+//         moviesContainer.appendChild(createMovieCard(movie, true));
+//     });
+// };
 const displayMovies = (movies) => {
     moviesContainer.innerHTML = "";
     if (!movies || movies.length === 0) {
         moviesContainer.innerHTML = "<p class='text-center'>No movies found.</p>";
         return;
     }
+
     movies.forEach(movie => {
-        moviesContainer.appendChild(createMovieCard(movie, true));
+        const movieCard = document.createElement("div");
+        movieCard.classList.add("col-md-4", "mb-4");
+        movieCard.innerHTML = `
+            <div class="card">
+                <img src="${movie.poster_path}" class="card-img-top" alt="${movie.title}">
+                <div class="card-body">
+                    <h5 class="card-title">${movie.title} (${movie.releaseDate})</h5>
+                    <p class="card-text"><strong>Director:</strong> ${movie.director}</p>
+                    <p class="card-text"><strong>Top Cast:</strong> ${movie.actors}</p>
+                    <p class="card-text">${movie.overview}</p>
+                    <p class="card-text"><strong>Rating:</strong> ${movie.rating}</p>
+                    <button class="btn btn-warning watchlist-btn">+ Watchlist</button>
+                </div>
+            </div>
+        `;
+
+        // Add event listener for "+ Watchlist" button
+        const button = movieCard.querySelector(".watchlist-btn");
+        button.addEventListener("click", () => {
+            addToWatchlist(movie.id, movie.title, movie.poster_path, movie.rating);
+        });
+
+        moviesContainer.appendChild(movieCard);
     });
 };
 

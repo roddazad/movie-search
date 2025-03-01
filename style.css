@@ -72,6 +72,37 @@ body {
     font-size: 1.1rem;
     padding: 10px 20px;
 }
+/* Search results Style_________________________________________ */
+#searchResults .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#searchResults .card-body {
+    text-align: center;
+}
+
+#searchResults .card-text {
+    font-size: 0.9rem;
+    color: #10851e;
+}
+
+/* Adjust search results for better readability */
+@media (max-width: 768px) {
+    #searchResults .col-md-4 {
+        flex: 0 0 48% !important;
+        max-width: 48% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #searchResults .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
 
 /* Trending Movies Section */
 #trending {
