@@ -121,11 +121,33 @@ const fetchClassicMovies = async (decade) => {
 // Function to display classic movies
 const displayClassicMovies = (movies) => {
     classicMoviesContainer.innerHTML = "";
-    movies.forEach(movie => {
-        classicMoviesContainer.appendChild(createMovieCard(movie, true));
-    });
-};
 
+    let slides = "";
+    for (let i = 0; i < movies.length; i += 4) {
+        let activeClass = i === 0 ? "active" : "";
+        let movieGroup = movies.slice(i, i + 4);
+
+        // Ensure exactly 4 movies per slide by adding placeholders if needed
+        while (movieGroup.length < 6) {
+            movieGroup.push({ title: "Placeholder", poster_path: null, vote_average: "N/A" });
+        }
+
+        slides += `
+            <div class="carousel-item ${activeClass}">
+                <div class="container">
+                    <div class="row d-flex justify-content-center gx-3">
+                        ${movieGroup.map(movie => `
+                            <div class="col-4 d-flex justify-content-center align-items-stretch">
+                                ${createMovieCard(movie, true, true).outerHTML}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    classicMoviesContainer.innerHTML = slides;
+};
 // Function to fetch movies based on search query
 const fetchMovies = async (query) => {
     console.log("Fetching movies for query:", query);

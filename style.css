@@ -231,7 +231,7 @@ body {
     min-height: 20px;
 }
 
-/* Carousel Items */
+/* Carousel Items ________________________________________________*/
 
 /* Ensure carousel container is properly centered */
 #trendingMoviesCarousel {
@@ -252,14 +252,6 @@ body {
     gap: 15px;
 }
 
-/* Force exactly 3 columns (col-4) per slide */
-.carousel-item .col-3 {
-    flex: 0 0 25% !important;   /* Occupies 1/4 of the row */
-    max-width: 25% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: stretch !important;
-}
 .carousel-item .col-lg-4,
 .carousel-item .col-md-4,
 .carousel-item .col-sm-6,
@@ -298,3 +290,10 @@ body {
         object-fit: cover !important;
     }
 }
+
+/* Ensure Classic Movies carousel is properly centered */
+#classicMoviesCarousel {
+    max-width: 80%;
+    margin: auto;
+}
+
