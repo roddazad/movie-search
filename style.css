@@ -9,12 +9,8 @@ body {
 
 /* Navbar Styling */
 .navbar {
-    background: transparent;
-    transition: background 0.3s ease-in-out;
-}
-
-.navbar.scrolled {
     background: rgba(0, 0, 0, 0.85);
+    transition: background 0.3s ease-in-out;
 }
 
 .navbar-brand {
@@ -36,7 +32,7 @@ body {
 /* Hero Section */
 .hero-section {
     height: 50vh;
-    background: url('./assests/img/hero-img.jpg') center/cover no-repeat;
+    background: url('./assets/img/hero-img.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,11 +64,18 @@ body {
     margin-bottom: 15px;
 }
 
-.hero-section .btn {
-    font-size: 1.1rem;
-    padding: 10px 20px;
+/* Search Bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
-/* Search results Style_________________________________________ */
+
+.search-bar input {
+    max-width: 400px;
+}
+
+/* Search Results */
 #searchResults .card {
     height: 100%;
     display: flex;
@@ -84,155 +87,84 @@ body {
     text-align: center;
 }
 
-#searchResults .card-text {
-    font-size: 0.9rem;
-    color: #10851e;
+/* Trending & Classic Movies Sections */
+#trending, #classics {
+    padding: 50px 0;
+    text-align: center;
 }
 
-/* Adjust search results for better readability */
+#trending h2, #classics h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #f39c12;
+}
+
+/* Carousel Styling */
+#trendingMoviesCarousel, #classicMoviesCarousel {
+    width: 100%;
+    max-width: 90%;
+    margin: auto;
+}
+
+.carousel-item .row {
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: stretch !important;
+    flex-wrap: nowrap !important;
+}
+
+.carousel-item .col-lg-4 {
+    flex: 0 0 33.33% !important;
+    max-width: 33.33% !important;
+    padding: 10px; /* Adds space between cards */
+}
+
+.carousel-item .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+
+.carousel-item .col-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    #searchResults .col-md-4 {
-        flex: 0 0 48% !important;
-        max-width: 48% !important;
+    .carousel-item .col-md-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
     }
 }
 
 @media (max-width: 480px) {
-    #searchResults .col-md-4 {
+    .carousel-item .col-12 {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
+
+    .carousel-item .card {
+        width: 90% !important;
+        max-width: 320px !important;
+        margin: auto !important;
+    }
 }
 
-/* Trending Movies Section */
-#trending {
+/* Watchlist Section */
+#watchlist {
     padding: 50px 0;
     text-align: center;
-}
-
-#trending h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #f39c12;
-}
-
-#trendingMoviesContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    color: white;
-}
-
-.trending-movie-card {
-    width: 200px;
-    margin: 10px;
-    background: #1c1c1c;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.trending-movie-card:hover {
-    transform: scale(1.05);
-}
-
-.trending-movie-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.trending-movie-card .card-body {
-    padding: 10px;
-}
-
-.trending-movie-card h5 {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-.trending-movie-card p {
-    font-size: 0.9rem;
-    color: #bbb;
-}
-
-/* Classic Movies Section */
-#classics {
-    padding: 50px 0;
-    text-align: center;
-}
-
-#classics h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #f39c12;
-}
-
-#decadeSelect {
-    background: #1c1c1c;
-    color: #fff;
-    border: 1px solid #f39c12;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-#classicMoviesContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    color: white;
-}
-
-.classic-movie-card {
-    width: 200px;
-    margin: 10px;
-    background: #1c1c1c;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.classic-movie-card:hover {
-    transform: scale(1.05);
-}
-
-.classic-movie-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.classic-movie-card .card-body {
-    padding: 10px;
-}
-
-.classic-movie-card h5 {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-.classic-movie-card p {
-    font-size: 0.9rem;
-    color: #bbb;
-}
-
-/* Fade-in animation */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.5s ease-in forwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }
 
 /* Card Styles */
 .card {
-    height: 100%;
+    width: 100% !important;  /* Forces cards to fill available space */
+    max-width: 100% !important;
+    height: 100%; 
     display: flex;
+    border-radius: 35px;
     flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    justify-content: space-between;
 }
 
 .card:hover {
@@ -243,6 +175,7 @@ body {
 .card img {
     height: 300px;
     object-fit: cover;
+    border-radius: 35px;
 }
 
 .card-body {
@@ -258,73 +191,11 @@ body {
     font-size: 1rem;
 }
 
-.card-text {
-    min-height: 20px;
+/* Footer */
+footer {
+    background: #000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
 }
-
-/* Carousel Items ________________________________________________*/
-
-/* Ensure carousel container is properly centered */
-#trendingMoviesCarousel {
-    max-width: 80%;
-    margin: auto;
-}
-
-/* Let each .carousel-item take full width */
-.carousel-item {
-    width: 100% !important;
-}
-
-/* Prevent the row from wrapping so we always see 3 columns in one row */
-.carousel-item .row {
-    display: flex !important;
-    justify-content: center !important;
-    flex-wrap: nowrap !important;
-    gap: 15px;
-}
-
-.carousel-item .col-lg-4,
-.carousel-item .col-md-4,
-.carousel-item .col-sm-6,
-.carousel-item .col-12 {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: stretch !important;
-}
-
-/* Tablet View (Two cards per slide) */
-@media (max-width: 768px) {
-    .carousel-item .col-sm-6 {
-        flex: 0 0 48% !important; /* Two cards per row */
-        max-width: 48% !important;
-    }
-}
-
-/* Small Mobile View (One card per slide) */
-@media (max-width: 480px) {
-    .carousel-item .col-12 {
-        flex: 0 0 100% !important; /* Full width for one card */
-        max-width: 100% !important;
-        padding: 0 15px; /* Adds side padding to prevent touching edges */
-    }
-
-    /* Adjust card size to fit well */
-    .carousel-item .card {
-        width: 90% !important;
-        max-width: 320px !important; /* Prevents extra-wide cards */
-        margin: auto !important;
-    }
-
-    /* Adjust image height for smaller screens */
-    .carousel-item img {
-        height: 250px !important;
-        object-fit: cover !important;
-    }
-}
-
-/* Ensure Classic Movies carousel is properly centered */
-#classicMoviesCarousel {
-    max-width: 80%;
-    margin: auto;
-}
-
