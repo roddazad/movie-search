@@ -111,6 +111,7 @@ body {
     justify-content: space-around !important;
     align-items: stretch !important;
     flex-wrap: nowrap !important;
+    gap: 10px; /* Add spacing between cards */
 }
 
 .carousel-item .col-lg-4 {
@@ -119,7 +120,7 @@ body {
     padding: 10px; /* Adds space between cards */
 }
 
-.carousel-item .col-md-6 {
+/* .carousel-item .col-md-6 {
     flex: 0 0 50% !important;
     max-width: 50% !important;
 }
@@ -127,7 +128,7 @@ body {
 .carousel-item .col-12 {
     flex: 0 0 100% !important;
     max-width: 100% !important;
-}
+} */
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
