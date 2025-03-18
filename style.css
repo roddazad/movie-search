@@ -32,7 +32,7 @@ body {
 /* Hero Section */
 .hero-section {
     height: 50vh;
-    background: url('./assets/img/hero-img.jpg') center/cover no-repeat;
+    background: url('./assests/img/hero-img.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,12 +55,18 @@ body {
 }
 
 .hero-section h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.3);
+}
+.hero-section h1:hover {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }
 
+
 .hero-section p {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    color: #f39c12;
     margin-bottom: 15px;
 }
 
@@ -73,6 +79,12 @@ body {
 
 .search-bar input {
     max-width: 400px;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-bar input:focus {
+    border: 2px solid #f39c12;
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.6);
 }
 
 /* Search Results */
@@ -150,11 +162,56 @@ body {
         margin: auto !important;
     }
 }
+@media (max-width: 768px) {
+    #watchlistMoviesContainer .card {
+        max-width: 180px;
+    }
+}
 
+@media (max-width: 480px) {
+    #watchlistMoviesContainer .card {
+        max-width: 100%;
+    }
+}
 /* Watchlist Section */
 #watchlist {
     padding: 50px 0;
     text-align: center;
+}
+#watchlistMoviesContainer .card {
+    max-width: 200px !important;  
+    width: 100% !important;
+    height: auto;
+    margin: 10px auto;
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 2px 6px rgba(255, 255, 255, 0.1);
+}
+#watchlistMoviesContainer .card img {
+    height: 220px;  
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+#watchlistMoviesContainer .card-body {
+    text-align: center;
+    padding: 10px;
+}
+
+.watchlist-btn {
+    background-color: #f39c12;
+    color: black;
+    font-weight: bold;
+}
+
+.watchlist-btn:hover {
+    background-color: #d68910;
+}
+#watchlistMoviesContainer .remove-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 5px;
 }
 
 /* Card Styles */
@@ -164,9 +221,12 @@ body {
     height: 100%; 
     display: flex;
     border-radius: 35px;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex-direction: column;
     justify-content: space-between;
 }
+
 
 .card:hover {
     transform: scale(1.05);
