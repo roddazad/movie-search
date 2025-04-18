@@ -32,7 +32,7 @@ cd movie-search
 3️⃣ **Obtain an API Key** from [TMDb](https://www.themoviedb.org/)  
 4️⃣ **Store the API Key** in a `config.js` file  
 ```js
-const API_KEY = 'your_api_key_here';
+
 ```
 5️⃣ **Run the project locally** by opening `index.html` in a browser.  
 
